@@ -1,0 +1,150 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+
+  a{
+    text-decoration: none;
+    color: #0e0f60;
+  }
+
+  body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to top, #d7d7ff, #f3f3f9);
+  }
+  
+  .container {
+    display: flex;
+    max-width: 900px;
+    width: 90%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  /* Left Section */
+  .left-section {
+    flex: 1;
+    padding: 20px 30px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .left-section h1 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 20px;
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .social-icons button {
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    color: #555;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .social-icons button:hover {
+    background: #eee;
+  }
+  
+  .left-section form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .left-section input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .left-section button {
+    background: #6a0dad;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .left-section button:hover {
+    background: #5a0099;
+  }
+  
+  /* Right Section */
+  .right-section {
+    flex: 1;
+    background: linear-gradient(to bottom right, #6a0dad, #9c27b0);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+  }
+  
+  .right-section h1 {
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+  
+  .right-section p {
+    margin-bottom: 30px;
+  }
+  
+  .right-section button {
+    background: white;
+    color: #6a0dad;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .right-section button:hover {
+    background: #f3f3f3;
+  }
+  .captcha-container {
+    margin: 15px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+  }
+    
