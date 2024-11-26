@@ -12,6 +12,11 @@
       box-sizing: border-box;
     }
 
+    a{
+      text-decoration: none;
+      color: #0f0993;
+    }
+
     video {
       position: absolute;
       top: 0;
@@ -141,6 +146,36 @@
     .right-section button:hover {
       background: #5a0099;
     }
+
+    .form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: rgb(143, 134, 134);
+  }
+  
+  .form-group {
+    flex: 1;
+  }
+  
+  .form-group input {
+    width: 100%; /* Make the input field fill the group width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  #capt {
+    background-color: lightgrey; /* Set light grey background */
+    color: black; /* Ensure text is visible */
+    border: 1px solid #ccc; /* Optional: Add a border for consistency */
+    border-radius: 5px;
+    font-size: 15px;
+    padding: 10px;
+    text-align: center; /* Center-align text in the box */
+  }
+
   </style>
 </head>
 <body>
@@ -153,7 +188,7 @@
     <div class="left-section">
       <h1>Welcome to Gagan Yaan!</h1>
       <p>Join us today and start your journey to comfort!</p>
-      <button onclick="switchToSignIn()">Login</button>
+      <button><a href="login.html">Login</a></button>
     </div>
 
     <!-- Right Section -->
@@ -166,20 +201,58 @@
         <input type="password" id="password" name="password" placeholder="Password" required>
         <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
         
-        <!-- CAPTCHA -->
-        <div class="captcha-container">
-          <p>CAPTCHA Placeholder</p>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" readonly id="capt">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" id="textinput" placeholder="Enter valid Captcha">
+          </div>
         </div>
+  <h4>Captcha not visible <img src="refresh.jpg" width="20px" onclick="cap()"></h4>
+<br>
 
-        <div class="form-footer">
-          <a href="#">Forgot Password?</a>
-        </div>
         
-        <button type="submit">Sign Up</button>
+        <button onclick="validcap()" type="submit">Sign Up</button>
       </form>
     </div>
   </div>
 
+  <script type="text/javascript">
+    function cap(){
+    var alpha = [ 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+        '0','1','2','3','4','5','6','7','8','9',
+        '!','@','#','$','%','^','&','*','+','?' ];
+        var a = alpha[Math.floor(Math.random()*72)];
+        var b = alpha[Math.floor(Math.random()*72)];
+        var c = alpha[Math.floor(Math.random()*72)];
+        var d = alpha[Math.floor(Math.random()*72)];
+        var e = alpha[Math.floor(Math.random()*72)];
+        var f = alpha[Math.floor(Math.random()*72)];
+
+        var final = a+b+c+d+e+f;
+        document.getElementById("capt").value=final;
+}
+function validcap(){
+    var stg1 = document.getElementById('capt').value;
+    var stg2 = document.getElementById('textinput').value;
+    if (stg1==stg2){
+        alert("Form is validated Successfully");
+        return true;
+    }
+    else {
+        alert("Please enter a valid captcha");
+        return false;
+    }
+    document.getElementById("textinput").value = "";
+}
+// Auto-refresh Captcha every 2 minutes
+setInterval(cap, 120000); // 120000 ms = 2 minutes
+
+// Initialize Captcha on page load
+window.onload = cap;
+  </script> 
   <script>
     // Placeholder for CAPTCHA integration
     function loadCaptcha() {
