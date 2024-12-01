@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gagan yaan.com</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0; /* Light gray background */
+    }
+
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .content {
+      position: relative;
+      color: #a00514; /* Dark gray text color */
+      text-align: center;
+      padding: 100px 0;
+    }
+
+    h1 {
+      font-size: 68px;
+      margin-bottom: 20px;
+      margin-top: 150px;
+      margin-left: -900px; /* Remove unnecessary margin, adjust as needed */
+      color: #054991; /* Blue heading color */
+    }
+
+    h2 {
+      font-size: 88px;
+      margin-top: 20px;
+      margin-left: 50px; /* Remove unnecessary margin, adjust as needed */
+      color: #4b3535; /* Gray secondary heading color */
+      text-align: center;
+      position: absolute;
+      top:20%;
+      left:50%;
+      transform: translate(-50%, -50%);
+      }
+
+    p {
+      font-size: 34px;
+      margin-bottom: 40px;
+      margin-left: -900px; /* Remove unnecessary margin, adjust as needed */
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center; /* Center the buttons horizontally */
+      margin-top: 10px; /* Add spacing between content and buttons */
+    }
+
+    button {
+      background-color: #007bff; /* Blue button background */
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin: 0 10px; /* Add margin between buttons */
+    }
+
+    a{
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    button:hover {
+      background-color: #0056b2; /* Darker blue hover color */
+    }
+  </style>
+</head>
+<body>
+  <video autoplay muted loop>
+    <source src="/assets/flight.mp4" type="video/mp4">
+  </video>
+
+  <div class="content">
+    <h2>Welcome to</h2>
+    <h1>"Gagan Yaan"</h1>
+    <p><b>Get fair fare for your journey</b></p>
+  </div>
+
+  <div class="buttons">
+    <button> <a href="/signup">Sign Up</a></button>
+    <button> <a href="/login">Login</a></button>
+  </div>
+</body>
+</html>

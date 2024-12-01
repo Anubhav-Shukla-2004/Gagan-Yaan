@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+    integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <title>Navigation Bar</title>
+  <style>
+    /* Resetting margin and padding */
+    body,
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .fa-solid {
+      color: #fff;
+      padding-right: 10px;
+    }
+
+    /* Navbar styling */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #6a0dad;
+      padding: 10px 20px;
+    }
+
+    /* Logo styling */
+    .logo {
+      height: 50px;
+      zoom: 10%;
+    }
+
+    /* Navigation links styling */
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin: 0 15px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .nav-links a:hover {
+      color: #227582;
+    }
+
+    /* Popup styling */
+    .user-popup {
+      position: absolute;
+      top: 50px;
+      right: 20px;
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    .user-popup a {
+      color: #6a0dad;
+      text-decoration: none;
+      display: block;
+      padding: 8px 0;
+    }
+
+    .user-popup a:hover {
+      color: #227582;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .nav-links {
+        flex-direction: column;
+        align-items: flex-end;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <img style="border-radius: 60%" src="/assets/logo.png" alt="Logo" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about-us">About Us</a></li>
+      <li><a href="#services">Services</a></li>
+
+      <% if (user) { %> <!-- Check if user is logged in -->
+        <li><a href="javascript:void(0);" onclick="togglePopup()"><i class="fa-solid fa-user"></i><%= user.fullname %></a></li>
+      <% } %>
+    </ul>
+  </nav>
+
+  <!-- Popup for logout -->
+  <% if (user) { %>
+    <div class="user-popup" id="userPopup">
+      <a href="/logout">Logout</a>
+    </div>
+  <% } %>
+
+  <script>
+    // Function to toggle the user popup visibility
+    function togglePopup() {
+      const popup = document.getElementById('userPopup');
+      const isVisible = popup.style.display === 'block';
+      // Toggle the display property
+      popup.style.display = isVisible ? 'none' : 'block';
+    }
+
+    // Close the popup if the user clicks anywhere outside
+    window.onclick = function(event) {
+      const popup = document.getElementById('userPopup');
+      if (!popup.contains(event.target) && !event.target.closest('a')) {
+        popup.style.display = 'none';
+      }
+    };
+  </script>
+</body>
+
+</html>
