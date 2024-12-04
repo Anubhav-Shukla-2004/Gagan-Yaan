@@ -96,7 +96,6 @@ app.post("/signup", async (req, res) => {
 });
 
 // Login route
-// Login route
 app.post("/login", async (req, res) => {
     try {
         const { email, password, captcha } = req.body;

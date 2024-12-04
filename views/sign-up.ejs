@@ -149,38 +149,60 @@
     }
 
     .form-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 15px;
-      color: rgb(143, 134, 134);
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: rgb(143, 134, 134);
+  }
+  
+  .form-group {
+    flex: 1;
+  }
+  
+  .form-group input {
+    width: 100%; /* Make the input field fill the group width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .form-row {
+    display: flex; /* Align child elements (form-group) horizontally */
+    align-items: center; /* Vertically align elements */
+    gap: 10px; /* Space between the CAPTCHA box and the input field */
+  }
+  
+  .form-group {
+    flex: 1; /* Allow the elements to share the available space equally */
+  }
+  
+  .captcha-box {
+    background-color: lightgrey; /* Light grey background for CAPTCHA */
+    color: black; /* Black text */
+    border: 1px solid #ccc; /* Border around CAPTCHA */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 15px; /* Font size for text */
+    padding: 10px; /* Padding inside the box */
+    text-align: center; /* Center-align text */
+    width: 100%; /* Allow the box to stretch based on the container */
+  }
+  
+  #captcha {
+    padding: 10px; /* Add padding for better appearance */
+    padding-top: 10px;
+    font-size: 15px; /* Font size for text input */
+    border: 1px solid #ccc; /* Border style for input box */
+    border-radius: 5px; /* Rounded corners for consistency */
+    width: 100%; /* Allow the input to stretch within the container */
+    margin-top: 15px;
+  }  
+
+    .error-message {
+      color: red;
+      font-weight: bold;
     }
 
-    .form-group {
-      flex: 1;
-    }
-
-    .form-group input {
-      width: 100%;
-      /* Make the input field fill the group width */
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    #capt {
-      background-color: lightgrey;
-      /* Set light grey background */
-      color: black;
-      /* Ensure text is visible */
-      border: 1px solid #ccc;
-      /* Optional: Add a border for consistency */
-      border-radius: 5px;
-      font-size: 15px;
-      padding: 10px;
-      text-align: center;
-      /* Center-align text in the box */
-    }
   </style>
 </head>
 
@@ -209,11 +231,14 @@
         <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
 
         <div class="form-row">
-          <div>
-            <label for="captcha"><span id="captcha-display"><%= captcha %></span></label>
+          <div class="form-group col-md-6">
+            <div id="captcha-display" class="captcha-box" readonly><%= captcha %></div>
+          </div>
+          <div class="form-group col-md-6">
             <input type="text" id="captcha" name="captcha" placeholder="Enter Captcha" required />
-        </div>
-        </div>
+          </div>
+        </div>      
+        
         <% if (message) { %>
           <div class="error-message"><%= message %></div>
       <% } %>

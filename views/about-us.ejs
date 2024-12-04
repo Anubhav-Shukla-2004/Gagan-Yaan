@@ -92,62 +92,6 @@
         align-items: flex-end;
       }
     }
-
-    /* New section for flight company images and data */
-    .flight-companies {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      padding: 20px;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .flight-company {
-      background-color: #f4f4f4;
-      border-radius: 8px;
-      overflow: hidden;
-      width: 280px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      padding: 15px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .flight-company img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-
-    .flight-company h3 {
-      color: #6a0dad;
-      font-size: 20px;
-      margin-top: 10px;
-    }
-
-    .flight-company p {
-      color: #555;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    .flight-company:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Ensure responsive behavior */
-    @media (max-width: 768px) {
-      .flight-companies {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .flight-company {
-        width: 100%;
-      }
-    }
   </style>
 </head>
 
@@ -167,6 +111,8 @@
     </ul>
   </nav>
 
+  <div>About-Us</div>
+  
   <!-- Popup for logout -->
   <% if (user) { %>
     <div class="user-popup" id="userPopup">
@@ -174,62 +120,12 @@
     </div>
   <% } %>
 
-  <!-- Flight Company Section -->
-  <div class="flight-companies">
-    <div class="flight-company">
-      <img src="/assets/air-india.png" alt="Air-India">
-      <h3>Air-India Airline</h3>
-      <p>Quality service, affordable prices. Explore worldwide destinations.</p>
-    </div>
-
-    <div class="flight-company">
-      <img src="/assets/emirates.png" alt="Emirates">
-      <h3>Emirates Airline</h3>
-      <p>Comfortable flights with in-flight entertainment. Your journey, our priority.</p>
-    </div>
-
-    <div class="flight-company">
-      <img src="/assets/qatar.png" alt="Qatar">
-      <h3>Qatar Airline</h3>
-      <p>Experience luxury flying at great prices. Fly with us for unforgettable adventures.</p>
-    </div>
-
-    <div class="flight-company">
-      <img src="/assets/indigo.jpg" alt="IndiGo">
-      <h3>IndiGo Airline</h3>
-      <p>India’s largest low-cost airline, known for its punctuality and affordable fares.</p>
-    </div>
-
-    <div class="flight-company">
-      <img src="/assets/spice-jet.jpg" alt="SpiceJet">
-      <h3>SpiceJet Airline</h3>
-      <p>A low-cost airline offering both domestic and international flights.</p>
-    </div>
-
-    <div class="flight-company">
-      <img src="/assets/airasia.jpg" alt="AirAsia India">
-      <h3>AirAsia India Airline</h3>
-      <p>A part of the AirAsia Group, known for its affordable air travel across India.</p>
-    </div>
-
-    <div class="flight-company">
-      <img src="/assets/vistara.jpg" alt="Vistara">
-      <h3>Vistara Airline</h3>
-      <p>A premium full-service airline offering comfort and luxury on domestic flights.</p>
-    </div>
-
-    <div class="flight-company">
-      <img src="/assets/goair.jpg" alt="GoAir">
-      <h3>GoAir Airline</h3>
-      <p>A low-cost airline offering reliable and affordable domestic flights.</p>
-    </div>
-  </div>
-
   <script>
     // Function to toggle the user popup visibility
     function togglePopup() {
       const popup = document.getElementById('userPopup');
       const isVisible = popup.style.display === 'block';
+      // Toggle the display property
       popup.style.display = isVisible ? 'none' : 'block';
     }
 
@@ -242,4 +138,5 @@
     };
   </script>
 </body>
+
 </html>

@@ -5,6 +5,11 @@
     box-sizing: border-box;
   }
   
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
+
   video {
     position: absolute;
     top: 0;
@@ -146,6 +151,7 @@
   .right-section button:hover {
     background: #f3f3f3;
   }
+  
   .form-row {
     display: flex;
     justify-content: space-between;
@@ -165,13 +171,33 @@
     border-radius: 5px;
   }
   
-  #capt {
-    background-color: lightgrey; /* Set light grey background */
-    color: black; /* Ensure text is visible */
-    border: 1px solid #ccc; /* Optional: Add a border for consistency */
-    border-radius: 5px;
-    font-size: 15px;
-    padding: 10px;
-    text-align: center; /* Center-align text in the box */
+  .form-row {
+    display: flex; /* Align child elements (form-group) horizontally */
+    align-items: center; /* Vertically align elements */
+    gap: 10px; /* Space between the CAPTCHA box and the input field */
   }
   
+  .form-group {
+    flex: 1; /* Allow the elements to share the available space equally */
+  }
+  
+  .captcha-box {
+    background-color: lightgrey; /* Light grey background for CAPTCHA */
+    color: black; /* Black text */
+    border: 1px solid #ccc; /* Border around CAPTCHA */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 15px; /* Font size for text */
+    padding: 10px; /* Padding inside the box */
+    text-align: center; /* Center-align text */
+    width: 100%; /* Allow the box to stretch based on the container */
+  }
+  
+  #captcha {
+    padding: 10px; /* Add padding for better appearance */
+    padding-top: 10px;
+    font-size: 15px; /* Font size for text input */
+    border: 1px solid #ccc; /* Border style for input box */
+    border-radius: 5px; /* Rounded corners for consistency */
+    width: 100%; /* Allow the input to stretch within the container */
+    margin-top: 15px;
+  }  
