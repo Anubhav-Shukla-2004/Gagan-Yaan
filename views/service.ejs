@@ -8,7 +8,7 @@
     integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <title>Navigation Bar</title>
+  <title>Flight Fare Prediction</title>
   <style>
     /* Resetting margin and padding */
     body,
@@ -17,8 +17,23 @@
       padding: 0;
     }
 
+    video {
+  position: fixed;  /* Fix the video in place */
+  top: 0;
+  left: 0;
+  width: 100vw;  /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  object-fit: cover;  /* Ensure the video covers the entire screen */
+  z-index: -1;  /* Keep the video behind the content */
+}
+
     body {
       font-family: Arial, sans-serif;
+      background-image: url('/path-to-your-image.jpg'); /* Set your background image path here */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      height: 100vh; /* Make sure the background covers the entire viewport */
     }
 
     .fa-solid {
@@ -31,7 +46,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: #6a0dad;
+      background-color: rgba(106, 13, 173, 0.8); /* Semi-transparent background for navbar */
       padding: 10px 20px;
     }
 
@@ -61,35 +76,80 @@
       color: #227582;
     }
 
-    /* Popup styling */
-    .user-popup {
-      position: absolute;
-      top: 50px;
-      right: 20px;
-      background-color: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      display: none;
-      z-index: 1000;
+    /* Form Styling */
+    .form-container {
+      width: 50%;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0); /* Semi-transparent white background */
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
     }
 
-    .user-popup a {
+    .form-container h1 {
+      text-align: center;
+      font-size: 24px;
       color: #6a0dad;
-      text-decoration: none;
-      display: block;
-      padding: 8px 0;
     }
 
-    .user-popup a:hover {
-      color: #227582;
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      font-size: 16px;
+      font-weight: bold;
+      display: block;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .form-group input[type="date"] {
+      width: 45%;
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .form-group.button-container {
+  display: flex;
+  justify-content: center; /* This centers the button horizontally */
+  margin-top: 20px;
+}
+
+.form-group button {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #6a0dad;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-group button:hover {
+  background-color: #5a0a9f;
+}
+
+    .result {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #6a0dad;
     }
 
     /* Responsive design */
     @media (max-width: 768px) {
-      .nav-links {
-        flex-direction: column;
-        align-items: flex-end;
+      .form-container {
+        width: 90%;
       }
     }
   </style>
@@ -101,9 +161,9 @@
       <img style="border-radius: 60%" src="/assets/logo.png" alt="Logo" />
     </div>
     <ul class="nav-links">
-      <li><a href="main.ejs">Home</a></li>
-      <li><a href="service.ejs">Services</a></li>
-      <li><a href="about-us.ejs">About Us</a></li>
+      <li><a href="/main">Home</a></li>
+      <li><a href="/service">Services</a></li>
+      <li><a href="/about-us">About Us</a></li>
       
       <% if (user) { %> <!-- Check if user is logged in -->
         <li><a href="javascript:void(0);" onclick="togglePopup()"><i class="fa-solid fa-user"></i><%= user.fullname %></a></li>
@@ -111,7 +171,71 @@
     </ul>
   </nav>
 
-<div>Services</div>
+  <video autoplay muted loop>
+    <source src="/assets/flight.mp4" type="video/mp4">
+  </video>
+
+  <div class="form-container">
+    <h1>Flight Fare Prediction</h1>
+    <form method="POST">
+      <div class="form-group">
+        <label for="source">Source</label>
+        <select id="source" name="source" required>
+          <option value="Banglore">Banglore</option>
+          <option value="Delhi">Delhi</option>
+          <!-- Add other source options here -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="destination">Destination</label>
+        <select id="destination" name="destination" required>
+          <option value="Delhi">Delhi</option>
+          <option value="Banglore">Banglore</option>
+          <!-- Add other destination options here -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="arrival-date">Arrival Date</label>
+        <input type="date" id="arrival-date" name="arrival-date" required>
+      </div>
+
+      <div class="form-group">
+        <label for="departure-date">Departure Date</label>
+        <input type="date" id="departure-date" name="departure-date" required>
+      </div>
+
+      <div class="form-group">
+        <label for="total-stops">Total Stops</label>
+        <select id="total-stops" name="total-stops" required>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <!-- Add other stop options here -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="airline">Airline</label>
+        <select id="airline" name="airline" required>
+          <option value="IndiGo">IndiGo</option>
+          <option value="Air India">Air India</option>
+          <option value="SpiceJet">SpiceJet</option>
+          <!-- Add other airline options here -->
+        </select>
+      </div>
+
+      <div class="form-group button-container">
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+
+    <div class="result">
+      <!-- This section will display the result -->
+      {{ result }}
+    </div>
+  </div>
 
   <!-- Popup for logout -->
   <% if (user) { %>

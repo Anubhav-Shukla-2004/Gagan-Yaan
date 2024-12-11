@@ -26,6 +26,14 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
+app.get("/service", (req, res) => {
+    res.render("service", { user: req.session.user });
+});
+
+app.get("/about-us", (req, res) => {
+    res.render("about-us", { user: req.session.user });
+});
+
 const isAuthenticated = (req, res, next) => {
     if (req.session.user) {
         return next();

@@ -17,6 +17,17 @@
       padding: 0;
     }
 
+    
+    video {
+  position: fixed;  /* Fix the video in place */
+  top: 0;
+  left: 0;
+  width: 100vw;  /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  object-fit: cover;  /* Ensure the video covers the entire screen */
+  z-index: -1;  /* Keep the video behind the content */
+}
+
     body {
       font-family: Arial, sans-serif;
     }
@@ -157,15 +168,19 @@
       <img style="border-radius: 60%" src="/assets/logo.png" alt="Logo" />
     </div>
     <ul class="nav-links">
-      <li><a href="main.ejs">Home</a></li>
-      <li><a href="service.ejs">Services</a></li>
-      <li><a href="about-us.ejs">About Us</a></li>
+      <li><a href="/main">Home</a></li>
+      <li><a href="/service">Services</a></li>
+      <li><a href="/about-us">About Us</a></li>
       
       <% if (user) { %> <!-- Check if user is logged in -->
         <li><a href="javascript:void(0);" onclick="togglePopup()"><i class="fa-solid fa-user"></i><%= user.fullname %></a></li>
       <% } %>
     </ul>
   </nav>
+  
+  <video autoplay muted loop>
+    <source src="/assets/flight.mp4" type="video/mp4">
+  </video>
 
   <!-- Popup for logout -->
   <% if (user) { %>
