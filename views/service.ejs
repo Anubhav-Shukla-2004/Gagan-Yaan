@@ -232,74 +232,72 @@
     <source src="/assets/flight.mp4" type="video/mp4">
   </video>
 
-   <div class="main">
-  <div class="form-container">
-    <h1>Flight Fare Prediction</h1>
-    <form method="POST">
-      <div class="form-group">
-        <label for="source">Source</label>
-        <select id="source" name="source" required>
-          <option value="Banglore">Banglore</option>
-          <option value="Delhi">Delhi</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="destination">Destination</label>
-        <select id="destination" name="destination" required>
-          <option value="Delhi">Delhi</option>
-          <option value="Banglore">Banglore</option>
-        </select>
-      </div>
-
-      <div class="form-row">
+  <div class="main">
+    <div class="form-container">
+      <h1>Flight Fare Prediction</h1>
+      <form method="POST">
         <div class="form-group">
-          <label for="departure-date">Departure Date</label>
-          <input type="date" id="departure-date" name="departure-date" required>
-        </div>
-        <div class="form-group">
-          <label for="arrival-date">Arrival Date</label>
-          <input type="date" id="arrival-date" name="arrival-date" required>
-        </div>
-      </div>
-
-      <div class="form-row-1">
-        <div class="form-group">
-          <label for="total-stops">Total Stops</label>
-          <select id="total-stops" name="total-stops" required>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
+          <label for="source">Source</label>
+          <select id="source" name="source" required onchange="updateDestinationAndStops()">
+            <option value="Banglore">Banglore</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Mumbai">Mumbai</option>
           </select>
         </div>
+
         <div class="form-group">
-          <label for="halt">Halt Duration</label>
-          <select id="halt" name="halt" required>
-            <option value="None">None</option>
-            <option value="1 hour">1 hour</option>
-            <option value="2 hours">2 hours</option>
-            <option value="3+ hours">3+ hours</option>
+          <label for="destination">Destination</label>
+          <select id="destination" name="destination" required onchange="updateStopsAndHalts()">
+            <option value="Delhi">Delhi</option>
+            <option value="Banglore">Banglore</option>
+            <option value="Hyderabad">Hyderabad</option>
           </select>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="airline">Airline</label>
-        <select id="airline" name="airline" required>
-          <option value="IndiGo">IndiGo</option>
-          <option value="Air India">Air India</option>
-          <option value="SpiceJet">SpiceJet</option>
-        </select>
-      </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="departure-date">Departure Date</label>
+            <input type="date" id="departure-date" name="departure-date" required>
+          </div>
+          <div class="form-group">
+            <label for="arrival-date">Arrival Date</label>
+            <input type="date" id="arrival-date" name="arrival-date" required>
+          </div>
+        </div>
 
-      <div class="form-group button-container">
-        <button type="submit">Submit</button>
-      </div>
-    </form>
+        <div class="form-row-1">
+          <div class="form-group">
+            <label for="total-stops">Total Stops</label>
+            <select id="slct1" name="total-stops" required onchange="updateHalts()">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="halt">Halt Duration</label>
+            <select id="slct2" name="halt" required>
+              <!-- Halt options populated dynamically -->
+            </select>
+          </div>
+        </div>
 
+        <div class="form-group">
+          <label for="airline">Airline</label>
+          <select id="airline" name="airline" required>
+            <option value="IndiGo">IndiGo</option>
+            <option value="Air India">Air India</option>
+            <option value="SpiceJet">SpiceJet</option>
+          </select>
+        </div>
+
+        <div class="form-group button-container">
+          <button type="submit">Submit</button>
+        </div>
     <div class="result">
       {{ result }}
     </div>
+  </form>
   </div>
 </div>
 
@@ -311,6 +309,45 @@
   <% } %>
 
   <script>
+    //Function for halt option
+    const haltOptions = {
+      "Delhi-Banglore-1": ["Agra", "Hyderabad"],
+      "Delhi-Banglore-2": ["Lucknow-Mumbai", "Jaipur-Pune"],
+      "Banglore-Delhi-1": ["Chennai", "Nagpur"],
+      "Banglore-Delhi-2": ["Mumbai-Lucknow", "Pune-Jaipur"],
+      "Mumbai-Hyderabad-1": ["Goa", "Gujrat"],
+      "Mumbai-Hyderabad-2": ["Rajishtan-Delhi", "Pune-Gujrat"],
+      "Delhi-Hyderabad-1": ["Lucknow", "Pune"],
+      "Delhi-Hyderabad-2": ["Lucknow-Aayodha", "Aayodha-Rachi"],
+    };
+
+    function updateDestinationAndStops() {
+      updateStopsAndHalts();
+    }
+
+    function updateStopsAndHalts() {
+      const source = document.getElementById("source").value;
+      const destination = document.getElementById("destination").value;
+      const stops = document.getElementById("slct1").value;
+      const halt = document.getElementById("slct2");
+
+      halt.innerHTML = "<option value=''>Select Halt</option>";
+
+      const routeKey = `${source}-${destination}-${stops}`;
+      if (haltOptions[routeKey]) {
+        haltOptions[routeKey].forEach(haltPoint => {
+          const option = document.createElement("option");
+          option.value = haltPoint.toLowerCase();
+          option.textContent = haltPoint;
+          halt.appendChild(option);
+        });
+      }
+    }
+
+    function updateHalts() {
+      updateStopsAndHalts();
+    }
+
     // Function to toggle the user popup visibility
     function togglePopup() {
       const popup = document.getElementById('userPopup');
