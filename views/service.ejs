@@ -275,8 +275,8 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="halt">Halt Duration</label>
-            <select id="slct2" name="halt" required>
+            <label for="halt">Halt Place</label>
+            <select id="slct2" name="halt">
               <!-- Halt options populated dynamically -->
             </select>
           </div>
@@ -326,23 +326,35 @@
     }
 
     function updateStopsAndHalts() {
-      const source = document.getElementById("source").value;
-      const destination = document.getElementById("destination").value;
-      const stops = document.getElementById("slct1").value;
-      const halt = document.getElementById("slct2");
+  const source = document.getElementById("source").value;
+  const destination = document.getElementById("destination").value;
+  const stops = document.getElementById("slct1").value;
+  const halt = document.getElementById("slct2");
+  const haltContainer = halt.closest(".form-group");
 
-      halt.innerHTML = "<option value=''>Select Halt</option>";
+  halt.innerHTML = "<option value=''>Select Halt</option>";
 
-      const routeKey = `${source}-${destination}-${stops}`;
-      if (haltOptions[routeKey]) {
-        haltOptions[routeKey].forEach(haltPoint => {
-          const option = document.createElement("option");
-          option.value = haltPoint.toLowerCase();
-          option.textContent = haltPoint;
-          halt.appendChild(option);
-        });
-      }
+  if (stops === "0") {
+    // Hide or disable the "Halt Duration" field for 0 stops
+    haltContainer.style.display = "none";
+    halt.required = false;
+  } else {
+    // Show the "Halt Duration" field for 1 or more stops
+    haltContainer.style.display = "block";
+    halt.required = true;
+
+    const routeKey = `${source}-${destination}-${stops}`;
+    if (haltOptions[routeKey]) {
+      haltOptions[routeKey].forEach(haltPoint => {
+        const option = document.createElement("option");
+        option.value = haltPoint.toLowerCase();
+        option.textContent = haltPoint;
+        halt.appendChild(option);
+      });
     }
+  }
+}
+
 
     function updateHalts() {
       updateStopsAndHalts();
