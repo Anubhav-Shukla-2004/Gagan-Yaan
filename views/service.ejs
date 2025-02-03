@@ -22,13 +22,13 @@
     }
 
     video {
-      position: fixed;  /* Fix the video in place */
+      position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;  /* Full viewport width */
-      height: 100vh; /* Full viewport height */
-      object-fit: cover;  /* Ensure the video covers the entire screen */
-      z-index: -1;  /* Keep the video behind the content */
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
     }
 
     .fa-solid {
@@ -36,30 +36,6 @@
       padding-right: 10px;
     }
 
-    /* Navbar styling */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #6a0dad;
-      padding: 10px 20px;
-      position: relative; /* Ensures navbar elements are stacked properly */
-      z-index: 10; /* Higher z-index to keep it above the form container */
-    }
-
-    /* Logo styling */
-    .logo {
-      height: 50px;
-      zoom: 10%;
-      z-index: 20; /* Ensure logo is above other content */
-    }
-
-    .fa-solid {
-      color: #fff;
-      padding-right: 10px;
-    }
-
-    /* Navbar styling */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -68,6 +44,12 @@
       padding: 10px 20px;
       position: relative;
       z-index: 1;
+    }
+
+    .logo {
+      height: 50px;
+      zoom: 10%;
+      z-index: 20;
     }
 
     .nav-links {
@@ -89,14 +71,13 @@
       color: #227582;
     }
 
-    /* Form Styling */
     .form-container {
       width: 50%;
       margin: 50px auto;
       padding: 20px;
-      background-color: rgba(255, 255, 255, 0);
+      background-color: rgba(255, 255, 255, 0.9);
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       position: relative;
       z-index: 1;
     }
@@ -105,6 +86,7 @@
       text-align: center;
       font-size: 24px;
       color: #6a0dad;
+      margin-bottom: 20px;
     }
 
     .form-group {
@@ -115,18 +97,18 @@
       font-size: 16px;
       font-weight: bold;
       display: block;
+      color: #333;
     }
 
     .form-row {
       display: flex;
-      /* justify-content: space-between; */
       gap: 30px;
       width: 97.5%;
     }
 
     .form-row-1 {
       display: flex;
-      /* justify-content: space-between; */
+      justify-content: center;
       gap: 30px;
       width: 100%;
     }
@@ -139,27 +121,29 @@
     .form-group select,
     .form-group input {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       margin-top: 8px;
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       border-radius: 5px;
       font-size: 16px;
+      background-color: #fff;
     }
 
     .form-group.button-container {
       display: flex;
       justify-content: center;
-      margin-top: 20px;
+      margin-top: 30px;
     }
 
     .form-group button {
-      padding: 10px 20px;
+      padding: 12px 30px;
       font-size: 18px;
       background-color: #6a0dad;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
 
     .form-group button:hover {
@@ -169,9 +153,12 @@
     .result {
       margin-top: 30px;
       text-align: center;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bold;
       color: #6a0dad;
+      padding: 15px;
+      background-color: rgba(106, 13, 173, 0.1);
+      border-radius: 5px;
     }
 
     .user-popup {
@@ -193,20 +180,20 @@
       padding: 8px 0;
     }
 
-    .user-popup a:hover {
-      color: #227582;
-    }
-
-    /* Responsive design */
     @media (max-width: 768px) {
-      .nav-links {
-        flex-direction: column;
-        align-items: flex-end;
+      .form-container {
+        width: 90%;
+        margin: 30px auto;
       }
 
       .form-row {
         flex-direction: column;
-        gap: 0;
+        gap: 15px;
+      }
+
+      .form-row-1 {
+        flex-direction: column;
+        gap: 15px;
       }
     }
   </style>
@@ -222,9 +209,11 @@
       <li><a href="/service">Services</a></li>
       <li><a href="/about-us">About Us</a></li>
 
-      <% if (user) { %> <!-- Check if user is logged in -->
-        <li><a href="javascript:void(0);" onclick="togglePopup()"><i class="fa-solid fa-user"></i><%= user.fullname %></a></li>
-      <% } %>
+      <% if (user) { %>
+        <li><a href="javascript:void(0);" onclick="togglePopup()"><i class="fa-solid fa-user"></i>
+            <%= user.fullname %>
+          </a></li>
+        <% } %>
     </ul>
   </nav>
 
@@ -235,11 +224,11 @@
   <div class="main">
     <div class="form-container">
       <h1>Flight Fare Prediction</h1>
-      <form method="POST">
+      <form method="POST" action="/predict">
         <div class="form-group">
           <label for="source">Source</label>
-          <select id="source" name="source" required onchange="updateDestinationAndStops()">
-            <option value="Banglore">Banglore</option>
+          <select id="source" name="source" required>
+            <option value="Banglore">Bangalore</option>
             <option value="Delhi">Delhi</option>
             <option value="Mumbai">Mumbai</option>
           </select>
@@ -247,37 +236,31 @@
 
         <div class="form-group">
           <label for="destination">Destination</label>
-          <select id="destination" name="destination" required onchange="updateStopsAndHalts()">
+          <select id="destination" name="destination" required>
             <option value="Delhi">Delhi</option>
-            <option value="Banglore">Banglore</option>
+            <option value="Banglore">Bangalore</option>
             <option value="Hyderabad">Hyderabad</option>
           </select>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label for="departure-date">Departure Date</label>
-            <input type="date" id="departure-date" name="departure-date" required>
+            <label for="departure-datetime">Departure Date & Time</label>
+            <input type="datetime-local" id="departure-datetime" name="departure-datetime" required>
           </div>
           <div class="form-group">
-            <label for="arrival-date">Arrival Date</label>
-            <input type="date" id="arrival-date" name="arrival-date" required>
+            <label for="arrival-datetime">Arrival Date & Time</label>
+            <input type="datetime-local" id="arrival-datetime" name="arrival-datetime" required>
           </div>
         </div>
 
         <div class="form-row-1">
           <div class="form-group">
             <label for="total-stops">Total Stops</label>
-            <select id="slct1" name="total-stops" required onchange="updateHalts()">
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="halt">Halt Place</label>
-            <select id="slct2" name="halt">
-              <!-- Halt options populated dynamically -->
+            <select id="total-stops" name="total-stops" required>
+              <option value="0">Non-stop</option>
+              <option value="1">1 Stop</option>
+              <option value="2">2 Stops</option>
             </select>
           </div>
         </div>
@@ -288,94 +271,61 @@
             <option value="IndiGo">IndiGo</option>
             <option value="Air India">Air India</option>
             <option value="SpiceJet">SpiceJet</option>
+            <option value="Vistara">Vistara</option>
+            <option value="GoAir">GoAir</option>
           </select>
         </div>
 
         <div class="form-group button-container">
-          <button type="submit">Submit</button>
+          <button type="submit">Predict Fare</button>
         </div>
-    <div class="result">
-      {{ result }}
-    </div>
-  </form>
-  </div>
-</div>
 
-  <!-- Popup for logout -->
+        <div class="result">
+          <% if (typeof result !=='undefined' ) { %>
+            <h2>
+              <%= result %>
+            </h2>
+            <% } %>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <% if (user) { %>
     <div class="user-popup" id="userPopup">
       <a href="/logout">Logout</a>
     </div>
-  <% } %>
+    <% } %>
 
-  <script>
-    //Function for halt option
-    const haltOptions = {
-      "Delhi-Banglore-1": ["Agra", "Hyderabad"],
-      "Delhi-Banglore-2": ["Lucknow-Mumbai", "Jaipur-Pune"],
-      "Banglore-Delhi-1": ["Chennai", "Nagpur"],
-      "Banglore-Delhi-2": ["Mumbai-Lucknow", "Pune-Jaipur"],
-      "Mumbai-Hyderabad-1": ["Goa", "Gujrat"],
-      "Mumbai-Hyderabad-2": ["Rajishtan-Delhi", "Pune-Gujrat"],
-      "Delhi-Hyderabad-1": ["Lucknow", "Pune"],
-      "Delhi-Hyderabad-2": ["Lucknow-Aayodha", "Aayodha-Rachi"],
-    };
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const departureInput = document.getElementById("departure-datetime");
+          const arrivalInput = document.getElementById("arrival-datetime");
 
-    function updateDestinationAndStops() {
-      updateStopsAndHalts();
-    }
+          arrivalInput.addEventListener("change", function () {
+            const departureTime = new Date(departureInput.value);
+            const arrivalTime = new Date(arrivalInput.value);
 
-    function updateStopsAndHalts() {
-  const source = document.getElementById("source").value;
-  const destination = document.getElementById("destination").value;
-  const stops = document.getElementById("slct1").value;
-  const halt = document.getElementById("slct2");
-  const haltContainer = halt.closest(".form-group");
-
-  halt.innerHTML = "<option value=''>Select Halt</option>";
-
-  if (stops === "0") {
-    // Hide or disable the "Halt Duration" field for 0 stops
-    haltContainer.style.display = "none";
-    halt.required = false;
-  } else {
-    // Show the "Halt Duration" field for 1 or more stops
-    haltContainer.style.display = "block";
-    halt.required = true;
-
-    const routeKey = `${source}-${destination}-${stops}`;
-    if (haltOptions[routeKey]) {
-      haltOptions[routeKey].forEach(haltPoint => {
-        const option = document.createElement("option");
-        option.value = haltPoint.toLowerCase();
-        option.textContent = haltPoint;
-        halt.appendChild(option);
-      });
-    }
-  }
-}
+            if (arrivalTime <= departureTime) {
+              alert("Arrival date and time must be later than departure date and time.");
+              arrivalInput.value = ""; // Reset the arrival input
+            }
+          });
+        });
 
 
-    function updateHalts() {
-      updateStopsAndHalts();
-    }
+        // User popup functionality
+        function togglePopup() {
+          const popup = document.getElementById('userPopup');
+          popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
 
-    // Function to toggle the user popup visibility
-    function togglePopup() {
-      const popup = document.getElementById('userPopup');
-      const isVisible = popup.style.display === 'block';
-      // Toggle the display property
-      popup.style.display = isVisible ? 'none' : 'block';
-    }
-
-    // Close the popup if the user clicks anywhere outside
-    window.onclick = function(event) {
-      const popup = document.getElementById('userPopup');
-      if (!popup.contains(event.target) && !event.target.closest('a')) {
-        popup.style.display = 'none';
-      }
-    };
-  </script>
+        window.onclick = function (event) {
+          const popup = document.getElementById('userPopup');
+          if (!popup.contains(event.target) && !event.target.closest('a')) {
+            popup.style.display = 'none';
+          }
+        };
+      </script>
 </body>
-
 </html>

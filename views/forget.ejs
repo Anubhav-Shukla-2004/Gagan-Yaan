@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forget Password</title>
+  <link rel="stylesheet" href="/assets/login.css">
+</head>
+
+<body>
+  <video autoplay muted loop>
+    <source src="/assets/flight.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <!-- Left Section -->
+    <div class="left-section">
+      <h3>Forget Password</h3>
+
+      <!-- "Send OTP" Form -->
+      <% if (!showOtpForm) { %>
+        <form id="sendOtpForm" action="/forget-password" method="POST">
+          <input type="email" name="email" placeholder="Enter your email" value="<%= email || '' %>" required>
+          <!-- Error message styling -->
+          <% if (emailError) { %>
+            <p class="error-message" style="color: red; font-weight: bold;">
+              <%= emailError %>
+            </p>
+            <% } %>
+              <button type="submit">Send OTP</button>
+        </form>
+        <% } %>
+
+
+
+          <!-- OTP Form -->
+          <% if (showOtpForm) { %>
+            <form id="verifyOtpForm" action="/verify-otp" method="POST">
+              <input type="email" name="email" value="<%= email %>" required>
+              <input type="text" name="otp" placeholder="Enter OTP" required>
+              <% if (message) { %>
+                <p class="error-message" style="color: red;">
+                  <%= message %>
+                </p>
+                <% } %>
+                  <button type="submit">Verify OTP</button>
+            </form>
+            <% } %>
+
+
+    </div>
+
+    <!-- Right Section -->
+    <div class="right-section">
+      <h1>"Gagan Yaan"</h1>
+      <p><em>Get fair fare for your journey</em></p>
+      <h5>New Here?</h5>
+      <button><a href="/signup">Sign Up</a></button>
+    </div>
+  </div>
+  <script>
+  const otpForm = document.getElementById('verifyOtpForm');
+
+otpForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(otpForm);
+    const formBody = new URLSearchParams(formData).toString();
+
+    const response = await fetch(otpForm.action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formBody,
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+        window.location.href = '/main';  // Redirect manually
+    } else {
+        const errorMessage = data.message || 'An error occurred';
+        const errorElement = document.querySelector('.error-message');
+        if (errorElement) {
+            errorElement.innerText = errorMessage;
+        } else {
+            const errorDiv = document.createElement('div');
+            errorDiv.classList.add('error-message');
+            errorDiv.style.color = 'red';
+            errorDiv.innerText = errorMessage;
+            otpForm.insertAdjacentElement('beforebegin', errorDiv);
+        }
+    }
+});
+
+
+  </script>
+</body>
+
+</html>

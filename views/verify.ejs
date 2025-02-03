@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forget Password</title>
+  <link rel="stylesheet" href="/assets/login.css">
+</head>
+
+<body>
+  <video autoplay muted loop>
+    <source src="/assets/flight.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <!-- Left Section -->
+    <div class="left-section">
+        <form action="/verify-otp" method="POST">
+            <label for="email">Enter your Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="otp">Otp: </label>
+            <input type="text" name="otp">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Right Section -->
+    <div class="right-section">
+      <h1>"Gagan Yaan"</h1>
+      <p><em>get fair fare for your journey</em></p>
+      <h5>New Here?</h5>
+      <button> <a href="/signup">Sign Up</a></button>
+    </div>
+  </div>
+
+  <script src="/assets/script.js">
+  </script>
+</body>
+
+</html>
