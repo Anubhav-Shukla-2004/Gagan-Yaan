@@ -317,9 +317,11 @@ app.get("/logout", (req, res) => {
         res.redirect("/");
     });
 });
-const fetch = require('node-fetch'); // require node-fetch
+const fetch = require('node-fetch');
+
 app.post('/predict', async (req, res) => {
     try {
+        // Prepare URL-encoded form data
         const formData = new URLSearchParams();
         formData.append('source', req.body.source);
         formData.append('destination', req.body.destination);
@@ -328,24 +330,24 @@ app.post('/predict', async (req, res) => {
         formData.append('departure-datetime', req.body['departure-datetime']);
         formData.append('arrival-datetime', req.body['arrival-datetime']);
 
+        // Forward the request to Flask
         const response = await fetch('http://127.0.0.1:5000/predict', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: formData.toString()
         });
 
-        // Get raw text to see what is returned
-        const responseText = await response.text();
-        console.log("Raw response:", responseText);
+        // Parse the JSON response from Flask
+        const data = await response.json();
 
-        // Then try to parse as JSON
-        const data = JSON.parse(responseText);
+        // Render your EJS template with the result from Flask (prediction or error message)
         res.render('service', { result: data.result, user: req.session.user });
     } catch (error) {
         console.error("Error forwarding prediction request:", error);
         res.render('service', { result: 'Server Error', user: req.session.user });
     }
 });
+
 
 // Start the server
 const port = 5000;

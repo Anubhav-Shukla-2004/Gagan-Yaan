@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
     integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-
   <title>Flight Fare Prediction</title>
   <style>
     /* Resetting margin and padding */
@@ -208,12 +208,11 @@
       <li><a href="/main">Home</a></li>
       <li><a href="/service">Services</a></li>
       <li><a href="/about-us">About Us</a></li>
-
       <% if (user) { %>
         <li><a href="javascript:void(0);" onclick="togglePopup()"><i class="fa-solid fa-user"></i>
             <%= user.fullname %>
           </a></li>
-        <% } %>
+      <% } %>
     </ul>
   </nav>
 
@@ -224,6 +223,8 @@
   <div class="main">
     <div class="form-container">
       <h1>Flight Fare Prediction</h1>
+      <!-- Inline container for displaying date-related error messages -->
+      <div id="date-error-message" style="color: red; text-align: center; margin-bottom: 10px;"></div>
       <form method="POST" action="/predict">
         <div class="form-group">
           <label for="source">Source</label>
@@ -281,11 +282,11 @@
         </div>
 
         <div class="result">
-          <% if (typeof result !=='undefined' ) { %>
+          <% if (typeof result !== 'undefined') { %>
             <h2>
               <%= result %>
             </h2>
-            <% } %>
+          <% } %>
         </div>
       </form>
     </div>
@@ -295,45 +296,50 @@
     <div class="user-popup" id="userPopup">
       <a href="/logout">Logout</a>
     </div>
-    <% } %>
+  <% } %>
 
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const departureInput = document.getElementById("departure-datetime");
-          const arrivalInput = document.getElementById("arrival-datetime");
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const departureInput = document.getElementById("departure-datetime");
+      const arrivalInput = document.getElementById("arrival-datetime");
+      const form = document.querySelector("form");
+      const errorMessageDiv = document.getElementById("date-error-message");
 
-          arrivalInput.addEventListener("change", function () {
-            const departureTime = new Date(departureInput.value);
-            const arrivalTime = new Date(arrivalInput.value);
+      form.addEventListener("submit", function (event) {
+        // Clear any previous error message.
+        errorMessageDiv.innerText = "";
+        const departureTime = new Date(departureInput.value);
+        const arrivalTime = new Date(arrivalInput.value);
 
-            // Check if arrival is not later than departure
-            if (arrivalTime <= departureTime) {
-              alert("Arrival date and time must be later than departure date and time.");
-              return; // Do nothing else, but keep the values intact.
-            }
-
-            // Check if the difference is more than 24 hours (24 * 60 * 60 * 1000 milliseconds)
-            if ((arrivalTime - departureTime) > 24 * 60 * 60 * 1000) {
-              alert("Arrival date and time must be within 24 hours from the departure date.");
-              return; // Do nothing else, leaving the input values as they are.
-            }
-          });
-        });
-
-
-        // User popup functionality
-        function togglePopup() {
-          const popup = document.getElementById('userPopup');
-          popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        // Validate: Arrival must be later than departure.
+        if (arrivalTime <= departureTime) {
+          event.preventDefault();
+          errorMessageDiv.innerText = "Arrival date and time must be later than departure date and time.";
+          return;
         }
 
-        window.onclick = function (event) {
-          const popup = document.getElementById('userPopup');
-          if (!popup.contains(event.target) && !event.target.closest('a')) {
-            popup.style.display = 'none';
-          }
-        };
-      </script>
+        // Validate: Arrival must be within 24 hours of departure.
+        if ((arrivalTime - departureTime) > 24 * 60 * 60 * 1000) {
+          event.preventDefault();
+          errorMessageDiv.innerText = "Arrival date and time must be within 24 hours from the departure date.";
+          return;
+        }
+      });
+    });
+
+    // User popup functionality
+    function togglePopup() {
+      const popup = document.getElementById('userPopup');
+      popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+    }
+
+    window.onclick = function (event) {
+      const popup = document.getElementById('userPopup');
+      if (!popup.contains(event.target) && !event.target.closest('a')) {
+        popup.style.display = 'none';
+      }
+    };
+  </script>
 </body>
 
 </html>
