@@ -1,117 +1,63 @@
-import streamlit as st
-import os
-import pandas as pd
+from flask import Flask, request, jsonify
 import pickle
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.ensemble import RandomForestRegressor
+import pandas as pd
 
-# Title of the app
-st.title("Flight Price Prediction App")
+app = Flask(__name__)
 
-# Paths to model and feature files
-model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
-features_path = os.path.join(os.path.dirname(__file__), 'features.pkl')
+# Load your model and features
+model = pickle.load(open("model.pkl", "rb"))
+feature_columns = pickle.load(open("features.pkl", "rb"))
 
-# Check if model exists, else retrain
-if not os.path.exists(model_path) or not os.path.exists(features_path):
-    st.warning("Model not found. Retraining...")
+@app.route('/predict', methods=['POST'])
+def predict():
+    try:
+        source = request.form.get('source')
+        destination = request.form.get('destination')
+        airline = request.form.get('airline')
+        total_stops = int(request.form.get('total-stops'))
+        dep_datetime = request.form.get('departure-datetime')
+        arr_datetime = request.form.get('arrival-datetime')
 
-    # Load dataset
-    flight = pd.read_excel('FlightData.xlsx')
+        # Convert the datetime strings to pandas datetime objects
+        dep_date = pd.to_datetime(dep_datetime)
+        arr_date = pd.to_datetime(arr_datetime)
 
-    # Preprocessing
-    flight.dropna(inplace=True)
-    flight['Journey_Day'] = pd.to_datetime(flight.Date_of_Journey, format='%d/%m/%Y').dt.day
-    flight['Journey_Month'] = pd.to_datetime(flight.Date_of_Journey, format='%d/%m/%Y').dt.month
-    flight.drop(columns=['Date_of_Journey'], inplace=True)
+        if arr_date <= dep_date:
+            return jsonify({"result": "Error: Arrival time must be after departure time."})
+        
+        duration_hours = (arr_date - dep_date).seconds // 3600
+        duration_minutes = ((arr_date - dep_date).seconds // 60) % 60
 
-    # Convert categorical variables to numerical
-    flight = pd.get_dummies(flight, drop_first=True)
+        # Prepare input features
+        input_data = {
+            'Total_Stops': [total_stops],
+            'Journey_Day': [dep_date.day],
+            'Journey_Month': [dep_date.month],
+            'Dep_hour': [dep_date.hour],
+            'Dep_Minute': [dep_date.minute],
+            'Arrival_hour': [arr_date.hour],
+            'Arrival_Minute': [arr_date.minute],
+            'Duration_Hour': [duration_hours],
+            'Duration_Minute': [duration_minutes],
+            'Airline': [airline],
+            'Source': [source],
+            'Destination': [destination]
+        }
 
-    # Feature selection
-    x = flight.drop(columns=['Price'], axis=1)
-    y = flight['Price']
+        input_df = pd.DataFrame(input_data)
+        input_df = pd.get_dummies(input_df)
+        for col in feature_columns:
+            if col not in input_df.columns:
+                input_df[col] = 0
+        input_df = input_df[feature_columns]
 
-    # Train the model
-    model = RandomForestRegressor()
-    model.fit(x, y)
+        prediction = model.predict(input_df)[0]
+        predicted_fare = f"Predicted Fare: ₹{round(prediction, 2)}"
+        return jsonify({"result": predicted_fare})
 
-    # Save model and feature columns
-    with open(model_path, 'wb') as f:
-        pickle.dump(model, f)
+    except Exception as e:
+        print("Error during prediction:", e)
+        return jsonify({"result": "Server Error"})
 
-    with open(features_path, 'wb') as f:
-        pickle.dump(x.columns, f)
-
-    st.success("Model retrained and saved.")
-
-# Load model and feature names
-model = pickle.load(open(model_path, 'rb'))
-feature_columns = pickle.load(open(features_path, 'rb'))
-
-# User Input Form
-st.header("Enter Flight Details")
-
-# Load dataset for dropdown options
-flight = pd.read_excel('FlightData.xlsx')
-
-# Input selections
-airline = st.selectbox("Select Airline", flight['Airline'].unique())
-source = st.selectbox("Select Source", flight['Source'].unique())
-destination = st.selectbox("Select Destination", flight['Destination'].unique())
-
-journey_day = st.number_input("Journey Day", min_value=1, max_value=31)
-journey_month = st.number_input("Journey Month", min_value=1, max_value=12)
-duration_hour = st.number_input("Duration (Hours)", min_value=0, max_value=24)
-duration_minute = st.number_input("Duration (Minutes)", min_value=0, max_value=60)
-dep_hour = st.number_input("Departure Hour", min_value=0, max_value=23)
-dep_minute = st.number_input("Departure Minute", min_value=0, max_value=59)
-
-stops_mapping = {'Non-stop': 0, '1 stop': 1, '2 stops': 2, '3 stops': 3, '4 stops': 4}
-stops = st.selectbox("Total Stops", list(stops_mapping.keys()))
-total_stops = stops_mapping[stops]
-
-# Prepare input data
-input_data = {
-    'Airline': [airline],
-    'Source': [source],
-    'Destination': [destination],
-    'Journey_Day': [journey_day],
-    'Journey_Month': [journey_month],
-    'Duration_Hour': [duration_hour],
-    'Duration_Minute': [duration_minute],
-    'Dep_hour': [dep_hour],
-    'Dep_Minute': [dep_minute],
-    'Total_Stops': [total_stops]
-}
-
-input_df = pd.DataFrame(input_data)
-
-# One-hot encode input to match model training
-input_df = pd.get_dummies(input_df)
-
-# Ensure input_df has the same columns as training data
-for col in feature_columns:
-    if col not in input_df.columns:
-        input_df[col] = 0  # Add missing columns
-
-# Match the column order
-input_df = input_df[feature_columns]
-
-# Predict the price
-if st.button("Predict Price"):
-    prediction = model.predict(input_df)
-    st.success(f"The predicted flight price is: ₹{prediction[0]:.2f}")
-
-# Sidebar for Data Insights
-st.sidebar.header("Flight Data Insights")
-
-if st.sidebar.checkbox("Show Correlation Heatmap"):
-    # Drop non-numeric columns before plotting
-    numeric_flight = flight.select_dtypes(include=['number'])
-    
-    fig, ax = plt.subplots(figsize=(10, 10))
-    sns.heatmap(numeric_flight.corr(), annot=True, cmap='RdYlGn', ax=ax)
-    st.pyplot(fig)  # Pass figure explicitly
-
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

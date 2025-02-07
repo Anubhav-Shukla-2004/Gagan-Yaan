@@ -306,9 +306,16 @@
             const departureTime = new Date(departureInput.value);
             const arrivalTime = new Date(arrivalInput.value);
 
+            // Check if arrival is not later than departure
             if (arrivalTime <= departureTime) {
               alert("Arrival date and time must be later than departure date and time.");
-              arrivalInput.value = ""; // Reset the arrival input
+              return; // Do nothing else, but keep the values intact.
+            }
+
+            // Check if the difference is more than 24 hours (24 * 60 * 60 * 1000 milliseconds)
+            if ((arrivalTime - departureTime) > 24 * 60 * 60 * 1000) {
+              alert("Arrival date and time must be within 24 hours from the departure date.");
+              return; // Do nothing else, leaving the input values as they are.
             }
           });
         });
@@ -328,4 +335,5 @@
         };
       </script>
 </body>
+
 </html>

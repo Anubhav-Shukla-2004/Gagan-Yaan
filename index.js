@@ -137,54 +137,54 @@ app.post('/verify-otp', async (req, res) => {
     }
 });
 
-app.post('/predict', async (req, res) => {
-    try {
-        const { source, destination, airline, 'total-stops': totalStops,
-            'departure-datetime': depDateTime, 'arrival-datetime': arrDateTime } = req.body;
+// app.post('/predict', async (req, res) => {
+//     try {
+//         const { source, destination, airline, 'total-stops': totalStops,
+//             'departure-datetime': depDateTime, 'arrival-datetime': arrDateTime } = req.body;
 
-        const depDate = new Date(depDateTime);
-        const arrDate = new Date(arrDateTime);
+//         const depDate = new Date(depDateTime);
+//         const arrDate = new Date(arrDateTime);
 
-        if (arrDate <= depDate) {
-            return res.render('service', { result: 'Error: Arrival time must be after departure time.', user: req.session.user });
-        }
+//         if (arrDate <= depDate) {
+//             return res.render('service', { result: 'Error: Arrival time must be after departure time.', user: req.session.user });
+//         }
 
-        const durationMs = arrDate - depDate;
-        const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
-        const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+//         const durationMs = arrDate - depDate;
+//         const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
+//         const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
 
-        const features = {
-            Total_Stops: parseInt(totalStops),
-            Journey_Day: depDate.getDate(),
-            Journey_Month: depDate.getMonth() + 1,
-            Dep_hour: depDate.getHours(),
-            Dep_Minute: depDate.getMinutes(),
-            Arrival_hour: arrDate.getHours(),
-            Arrival_Minute: arrDate.getMinutes(),
-            Duration_Hour: durationHours,
-            Duration_Minute: durationMinutes,
-            Airline: airline,
-            Source: source,
-            Destination: destination
-        };
+//         const features = {
+//             Total_Stops: parseInt(totalStops),
+//             Journey_Day: depDate.getDate(),
+//             Journey_Month: depDate.getMonth() + 1,
+//             Dep_hour: depDate.getHours(),
+//             Dep_Minute: depDate.getMinutes(),
+//             Arrival_hour: arrDate.getHours(),
+//             Arrival_Minute: arrDate.getMinutes(),
+//             Duration_Hour: durationHours,
+//             Duration_Minute: durationMinutes,
+//             Airline: airline,
+//             Source: source,
+//             Destination: destination
+//         };
 
-        const pythonProcess = spawn('python', ['predict.py', JSON.stringify(features)]);
+//         const pythonProcess = spawn('python', ['predict.py', JSON.stringify(features)]);
 
-        pythonProcess.stdout.on('data', (data) => {
-            const prediction = parseFloat(data.toString()).toFixed(2);
-            res.render('service', { result: `Predicted Fare: ₹${prediction}`, user: req.session.user });
-        });
+//         pythonProcess.stdout.on('data', (data) => {
+//             const prediction = parseFloat(data.toString()).toFixed(2);
+//             res.render('service', { result: `Predicted Fare: ₹${prediction}`, user: req.session.user });
+//         });
 
-        pythonProcess.stderr.on('data', (data) => {
-            console.error(`Error: ${data}`);
-            res.render('service', { result: 'Error in prediction', user: req.session.user });
-        });
+//         pythonProcess.stderr.on('data', (data) => {
+//             console.error(`Error: ${data}`);
+//             res.render('service', { result: 'Error in prediction', user: req.session.user });
+//         });
 
-    } catch (error) {
-        console.error(error);
-        res.render('service', { result: 'Server Error', user: req.session.user });
-    }
-});
+//     } catch (error) {
+//         console.error(error);
+//         res.render('service', { result: 'Server Error', user: req.session.user });
+//     }
+// });
 
 
 const isAuthenticated = (req, res, next) => {
@@ -317,55 +317,33 @@ app.get("/logout", (req, res) => {
         res.redirect("/");
     });
 });
-
-// Add the /predict route before app.listen()
+const fetch = require('node-fetch'); // require node-fetch
 app.post('/predict', async (req, res) => {
     try {
-        // Extract form data
-        const { source, destination, airline, 'total-stops': totalStops,
-            'departure-datetime': depDateTime, 'arrival-datetime': arrDateTime } = req.body;
+        const formData = new URLSearchParams();
+        formData.append('source', req.body.source);
+        formData.append('destination', req.body.destination);
+        formData.append('airline', req.body.airline);
+        formData.append('total-stops', req.body['total-stops']);
+        formData.append('departure-datetime', req.body['departure-datetime']);
+        formData.append('arrival-datetime', req.body['arrival-datetime']);
 
-        // Parse datetime
-        const depDate = new Date(depDateTime);
-        const arrDate = new Date(arrDateTime);
-
-        // Calculate duration
-        const durationMs = arrDate - depDate;
-        const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
-        const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
-
-        // Prepare features array
-        const features = {
-            Total_Stops: parseInt(totalStops),
-            Journey_Day: depDate.getDate(),
-            Journey_Month: depDate.getMonth() + 1,
-            Dep_hour: depDate.getHours(),
-            Dep_Minute: depDate.getMinutes(),
-            Arrival_hour: arrDate.getHours(),
-            Arrival_Minute: arrDate.getMinutes(),
-            Duration_Hour: durationHours,
-            Duration_Minute: durationMinutes,
-            Airline: airline,
-            Source: source,
-            Destination: destination
-        };
-
-        // Execute Python script
-        const pythonProcess = spawn('python', ['predict.py', JSON.stringify(features)]);
-
-        pythonProcess.stdout.on('data', (data) => {
-            const prediction = parseFloat(data.toString()).toFixed(2);
-            res.render('main', { result: `Predicted Fare: ₹${prediction}`, user: req.session.user }); // Render the result
+        const response = await fetch('http://127.0.0.1:5000/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formData.toString()
         });
 
-        pythonProcess.stderr.on('data', (data) => {
-            console.error(`Error: ${data}`);
-            res.render('main', { result: 'Error in prediction', user: req.session.user }); // Render error
-        });
+        // Get raw text to see what is returned
+        const responseText = await response.text();
+        console.log("Raw response:", responseText);
 
+        // Then try to parse as JSON
+        const data = JSON.parse(responseText);
+        res.render('service', { result: data.result, user: req.session.user });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Server Error');
+        console.error("Error forwarding prediction request:", error);
+        res.render('service', { result: 'Server Error', user: req.session.user });
     }
 });
 
