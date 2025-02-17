@@ -137,56 +137,6 @@ app.post('/verify-otp', async (req, res) => {
     }
 });
 
-// app.post('/predict', async (req, res) => {
-//     try {
-//         const { source, destination, airline, 'total-stops': totalStops,
-//             'departure-datetime': depDateTime, 'arrival-datetime': arrDateTime } = req.body;
-
-//         const depDate = new Date(depDateTime);
-//         const arrDate = new Date(arrDateTime);
-
-//         if (arrDate <= depDate) {
-//             return res.render('service', { result: 'Error: Arrival time must be after departure time.', user: req.session.user });
-//         }
-
-//         const durationMs = arrDate - depDate;
-//         const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
-//         const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
-
-//         const features = {
-//             Total_Stops: parseInt(totalStops),
-//             Journey_Day: depDate.getDate(),
-//             Journey_Month: depDate.getMonth() + 1,
-//             Dep_hour: depDate.getHours(),
-//             Dep_Minute: depDate.getMinutes(),
-//             Arrival_hour: arrDate.getHours(),
-//             Arrival_Minute: arrDate.getMinutes(),
-//             Duration_Hour: durationHours,
-//             Duration_Minute: durationMinutes,
-//             Airline: airline,
-//             Source: source,
-//             Destination: destination
-//         };
-
-//         const pythonProcess = spawn('python', ['predict.py', JSON.stringify(features)]);
-
-//         pythonProcess.stdout.on('data', (data) => {
-//             const prediction = parseFloat(data.toString()).toFixed(2);
-//             res.render('service', { result: `Predicted Fare: ₹${prediction}`, user: req.session.user });
-//         });
-
-//         pythonProcess.stderr.on('data', (data) => {
-//             console.error(`Error: ${data}`);
-//             res.render('service', { result: 'Error in prediction', user: req.session.user });
-//         });
-
-//     } catch (error) {
-//         console.error(error);
-//         res.render('service', { result: 'Server Error', user: req.session.user });
-//     }
-// });
-
-
 const isAuthenticated = (req, res, next) => {
     if (req.session.user) {
         return next();
@@ -347,7 +297,6 @@ app.post('/predict', async (req, res) => {
         res.render('service', { result: 'Server Error', user: req.session.user });
     }
 });
-
 
 // Start the server
 const port = 5000;

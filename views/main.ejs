@@ -8,7 +8,7 @@
     integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <title>Navigation Bar</title>
+  <title>Gagan Yaan</title>
   <style>
     /* Resetting margin and padding */
     body,
@@ -17,16 +17,21 @@
       padding: 0;
     }
 
-    
+
     video {
-  position: fixed;  /* Fix the video in place */
-  top: 0;
-  left: 0;
-  width: 100vw;  /* Full viewport width */
-  height: 100vh; /* Full viewport height */
-  object-fit: cover;  /* Ensure the video covers the entire screen */
-  z-index: -1;  /* Keep the video behind the content */
-}
+      position: fixed;
+      /* Fix the video in place */
+      top: 0;
+      left: 0;
+      width: 100vw;
+      /* Full viewport width */
+      height: 100vh;
+      /* Full viewport height */
+      object-fit: cover;
+      /* Ensure the video covers the entire screen */
+      z-index: -1;
+      /* Keep the video behind the content */
+    }
 
     body {
       font-family: Arial, sans-serif;
@@ -171,13 +176,15 @@
       <li><a href="/main">Home</a></li>
       <li><a href="/service">Services</a></li>
       <li><a href="/about-us">About Us</a></li>
-      
+
       <% if (user) { %> <!-- Check if user is logged in -->
-        <li><a href="javascript:void(0);" onclick="togglePopup()"><i class="fa-solid fa-user"></i><%= user.fullname %></a></li>
-      <% } %>
+        <li><a href="javascript:void(0);" onclick="togglePopup()"><i class="fa-solid fa-user"></i>
+            <%= user.fullname %>
+          </a></li>
+        <% } %>
     </ul>
   </nav>
-  
+
   <video autoplay muted loop>
     <source src="/assets/flight.mp4" type="video/mp4">
   </video>
@@ -187,74 +194,99 @@
     <div class="user-popup" id="userPopup">
       <a href="/logout">Logout</a>
     </div>
-  <% } %>
+    <% } %>
 
-  <!-- Flight Company Section -->
-  <div class="flight-companies">
-    <div class="flight-company">
-      <img src="/assets/air-india.png" alt="Air-India">
-      <h3>Air-India Airline</h3>
-      <p>Quality service, affordable prices. Explore worldwide destinations.</p>
-    </div>
+      <!-- Flight Company Section -->
+      <div class="flight-companies">
+        <div class="flight-company">
+          <img src="/assets/jet-airways.jpg" alt="Jet Airways">
+          <h3>Jet Airways</h3>
+          <p>A former full-service airline in India, known for premium services. Expected to relaunch soon.</p>
+        </div>
 
-    <div class="flight-company">
-      <img src="/assets/emirates.png" alt="Emirates">
-      <h3>Emirates Airline</h3>
-      <p>Comfortable flights with in-flight entertainment. Your journey, our priority.</p>
-    </div>
+        <div class="flight-company">
+          <img src="/assets/indigo.jpg" alt="IndiGo">
+          <h3>IndiGo Airline</h3>
+          <p>India’s largest low-cost airline, known for its punctuality and affordable fares.</p>
+        </div>
 
-    <div class="flight-company">
-      <img src="/assets/qatar.png" alt="Qatar">
-      <h3>Qatar Airline</h3>
-      <p>Experience luxury flying at great prices. Fly with us for unforgettable adventures.</p>
-    </div>
+        <div class="flight-company">
+          <img src="/assets/air-india.png" alt="Air India">
+          <h3>Air India</h3>
+          <p>India’s national carrier, offering full-service flights with international and domestic operations.</p>
+        </div>
 
-    <div class="flight-company">
-      <img src="/assets/indigo.jpg" alt="IndiGo">
-      <h3>IndiGo Airline</h3>
-      <p>India’s largest low-cost airline, known for its punctuality and affordable fares.</p>
-    </div>
+        <div class="flight-company">
+          <img src="/assets/multiple-carriers.jpg" alt="Multiple Carriers">
+          <h3>Multiple Carriers</h3>
+          <p>Flights operated by more than one airline under a codeshare agreement.</p>
+        </div>
 
-    <div class="flight-company">
-      <img src="/assets/spice-jet.jpg" alt="SpiceJet">
-      <h3>SpiceJet Airline</h3>
-      <p>A low-cost airline offering both domestic and international flights.</p>
-    </div>
+        <div class="flight-company">
+          <img src="/assets/spice-jet.jpg" alt="SpiceJet">
+          <h3>SpiceJet Airline</h3>
+          <p>A budget airline in India offering competitive pricing on domestic and international routes.</p>
+        </div>
 
-    <div class="flight-company">
-      <img src="/assets/airasia.jpg" alt="AirAsia India">
-      <h3>AirAsia India Airline</h3>
-      <p>A part of the AirAsia Group, known for its affordable air travel across India.</p>
-    </div>
+        <div class="flight-company">
+          <img src="/assets/vistara.jpg" alt="Vistara">
+          <h3>Vistara Airline</h3>
+          <p>A premium full-service airline owned by Tata Group, offering luxury travel experiences.</p>
+        </div>
 
-    <div class="flight-company">
-      <img src="/assets/vistara.jpg" alt="Vistara">
-      <h3>Vistara Airline</h3>
-      <p>A premium full-service airline offering comfort and luxury on domestic flights.</p>
-    </div>
+        <div class="flight-company">
+          <img src="/assets/airasia.jpg" alt="AirAsia India">
+          <h3>AirAsia India Airline</h3>
+          <p>A low-cost carrier in India, known for budget-friendly fares and quality service.</p>
+        </div>
 
-    <div class="flight-company">
-      <img src="/assets/goair.jpg" alt="GoAir">
-      <h3>GoAir Airline</h3>
-      <p>A low-cost airline offering reliable and affordable domestic flights.</p>
-    </div>
-  </div>
+        <div class="flight-company">
+          <img src="/assets/goair.jpg" alt="GoAir">
+          <h3>GoAir Airline</h3>
+          <p>A low-cost airline offering reliable and affordable domestic flights. Rebranded as Go First.</p>
+        </div>
 
-  <script>
-    // Function to toggle the user popup visibility
-    function togglePopup() {
-      const popup = document.getElementById('userPopup');
-      const isVisible = popup.style.display === 'block';
-      popup.style.display = isVisible ? 'none' : 'block';
-    }
+        <div class="flight-company">
+          <img src="/assets/multiple-carriers-premium.jpg" alt="Multiple Carriers Premium Economy">
+          <h3>Multiple Carriers Premium Economy</h3>
+          <p>Flights operated by multiple airlines offering premium economy seating.</p>
+        </div>
 
-    // Close the popup if the user clicks anywhere outside
-    window.onclick = function(event) {
-      const popup = document.getElementById('userPopup');
-      if (!popup.contains(event.target) && !event.target.closest('a')) {
-        popup.style.display = 'none';
-      }
-    };
-  </script>
+        <div class="flight-company">
+          <img src="/assets/jet-airways-business.jpg" alt="Jet Airways Business">
+          <h3>Jet Airways Business</h3>
+          <p>Jet Airways' luxurious business class service, offering enhanced comfort and premium amenities.</p>
+        </div>
+
+        <div class="flight-company">
+          <img src="/assets/vistara-premium.jpg" alt="Vistara Premium Economy">
+          <h3>Vistara Premium Economy</h3>
+          <p>Vistara’s exclusive premium economy class, providing extra comfort and additional benefits.</p>
+        </div>
+
+        <div class="flight-company">
+          <img src="/assets/trujet.jpg" alt="TruJet">
+          <h3>TruJet Airline</h3>
+          <p>A regional airline in India that operated short-haul flights before suspending operations.</p>
+        </div>
+      </div>
+
+      <script>
+        // Function to toggle the user popup visibility
+        function togglePopup() {
+          const popup = document.getElementById('userPopup');
+          const isVisible = popup.style.display === 'block';
+          popup.style.display = isVisible ? 'none' : 'block';
+        }
+
+        // Close the popup if the user clicks anywhere outside
+        window.onclick = function (event) {
+          const popup = document.getElementById('userPopup');
+          if (!popup.contains(event.target) && !event.target.closest('a')) {
+            popup.style.display = 'none';
+          }
+        };
+      </script>
 </body>
+
 </html>

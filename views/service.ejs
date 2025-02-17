@@ -4,11 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
     integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <title>Flight Fare Prediction</title>
+  <title>Gagan Yaan</title>
   <style>
     /* Resetting margin and padding */
     body,
@@ -180,6 +179,26 @@
       padding: 8px 0;
     }
 
+    .alert-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #6a0dad;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      display: none;
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      z-index: 1000;
+    }
+
+
     @media (max-width: 768px) {
       .form-container {
         width: 90%;
@@ -212,7 +231,7 @@
         <li><a href="javascript:void(0);" onclick="togglePopup()"><i class="fa-solid fa-user"></i>
             <%= user.fullname %>
           </a></li>
-      <% } %>
+        <% } %>
     </ul>
   </nav>
 
@@ -229,18 +248,23 @@
         <div class="form-group">
           <label for="source">Source</label>
           <select id="source" name="source" required>
-            <option value="Banglore">Bangalore</option>
             <option value="Delhi">Delhi</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="Banglore">Bangalore</option>
             <option value="Mumbai">Mumbai</option>
+            <option value="Chennai">Chennai</option>
           </select>
         </div>
 
         <div class="form-group">
           <label for="destination">Destination</label>
           <select id="destination" name="destination" required>
-            <option value="Delhi">Delhi</option>
+            <option value="Cochin">Cochin</option>
             <option value="Banglore">Bangalore</option>
+            <option value="Delhi">Delhi</option>
+            <option value="New Delhi">New Delhi</option>
             <option value="Hyderabad">Hyderabad</option>
+            <option value="Kolkata">Kolkata</option>
           </select>
         </div>
 
@@ -269,12 +293,23 @@
         <div class="form-group">
           <label for="airline">Airline</label>
           <select id="airline" name="airline" required>
+            <option value="Jet Airways">Jet Airways</option>
             <option value="IndiGo">IndiGo</option>
             <option value="Air India">Air India</option>
+            <option value="Multiple Carriers">Multiple Carriers</option>
             <option value="SpiceJet">SpiceJet</option>
             <option value="Vistara">Vistara</option>
+            <option value="Air Asia">Air Asia</option>
             <option value="GoAir">GoAir</option>
+            <option value="Multiple carriers Prenimum economy">Multiple carriers Prenimum economy</option>
+            <option value="Jet Airways Business">Jet Airways Business</option>
+            <option value="Vistara Prenimum economy">Vistara Prenimum economy</option>
+            <option value="TruJet">TruJet</option>
           </select>
+        </div>
+
+        <div id="alert-box" class="alert-box">
+          <span id="alert-message"></span>
         </div>
 
         <div class="form-group button-container">
@@ -282,11 +317,11 @@
         </div>
 
         <div class="result">
-          <% if (typeof result !== 'undefined') { %>
+          <% if (typeof result !=='undefined' ) { %>
             <h2>
               <%= result %>
             </h2>
-          <% } %>
+            <% } %>
         </div>
       </form>
     </div>
@@ -296,50 +331,73 @@
     <div class="user-popup" id="userPopup">
       <a href="/logout">Logout</a>
     </div>
-  <% } %>
+    <% } %>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const departureInput = document.getElementById("departure-datetime");
-      const arrivalInput = document.getElementById("arrival-datetime");
-      const form = document.querySelector("form");
-      const errorMessageDiv = document.getElementById("date-error-message");
+      <script>
+        function showAlert(message) {
+          const alertBox = document.getElementById("alert-box");
+          const alertMessage = document.getElementById("alert-message");
 
-      form.addEventListener("submit", function (event) {
-        // Clear any previous error message.
-        errorMessageDiv.innerText = "";
-        const departureTime = new Date(departureInput.value);
-        const arrivalTime = new Date(arrivalInput.value);
+          alertMessage.textContent = message;
+          alertBox.style.display = "block";
 
-        // Validate: Arrival must be later than departure.
-        if (arrivalTime <= departureTime) {
-          event.preventDefault();
-          errorMessageDiv.innerText = "Arrival date and time must be later than departure date and time.";
-          return;
+          setTimeout(() => {
+            alertBox.style.opacity = "0";
+            setTimeout(() => {
+              alertBox.style.display = "none";
+              alertBox.style.opacity = "1"; // Reset opacity
+            }, 500);
+          }, 3000); // Hides after 3 seconds
         }
 
-        // Validate: Arrival must be within 24 hours of departure.
-        if ((arrivalTime - departureTime) > 24 * 60 * 60 * 1000) {
-          event.preventDefault();
-          errorMessageDiv.innerText = "Arrival date and time must be within 24 hours from the departure date.";
-          return;
+        // Example: Show alert after page load or event
+        // showAlert("Flight fare predicted successfully!");
+
+        // Form Validation & Alert on Error
+        document.addEventListener("DOMContentLoaded", function () {
+          const departureInput = document.getElementById("departure-datetime");
+          const arrivalInput = document.getElementById("arrival-datetime");
+          const form = document.querySelector("form");
+
+          form.addEventListener("submit", function (event) {
+            const departureTime = new Date(departureInput.value);
+            const arrivalTime = new Date(arrivalInput.value);
+
+            if (arrivalTime <= departureTime) {
+              event.preventDefault();
+              showAlert("⚠️ Arrival date and time must be later than departure!");
+              return;
+            }
+
+            if ((arrivalTime - departureTime) > 24 * 60 * 60 * 1000) {
+              event.preventDefault();
+              showAlert("⚠️ Arrival must be within 24 hours from departure!");
+              return;
+            }
+          });
+        });
+
+
+        // User popup functionality
+        function togglePopup() {
+          const popup = document.getElementById('userPopup');
+          popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
         }
-      });
-    });
 
-    // User popup functionality
-    function togglePopup() {
-      const popup = document.getElementById('userPopup');
-      popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
-    }
+        window.onclick = function (event) {
+          const popup = document.getElementById('userPopup');
+          if (!popup.contains(event.target) && !event.target.closest('a')) {
+            popup.style.display = 'none';
+          }
 
-    window.onclick = function (event) {
-      const popup = document.getElementById('userPopup');
-      if (!popup.contains(event.target) && !event.target.closest('a')) {
-        popup.style.display = 'none';
-      }
-    };
-  </script>
+          window.onload = function () {
+            const resultDiv = document.querySelector(".result");
+            if (resultDiv) {
+              resultDiv.innerHTML = ""; // Clear the result on page reload
+            }
+          }
+        };
+      </script>
 </body>
 
 </html>
